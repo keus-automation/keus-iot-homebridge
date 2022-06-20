@@ -5,7 +5,7 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { GarageDoorAccessory } from './GarageDoorAccessory';
 import { LightAccessory } from './LightAccessory';
 import {ThermostatAccessory} from './Thermostat';
-import {FanAccessory} from './Fan'
+import {FanAccessory} from './Fan';
 import { TemperatureSensorAccessory } from './TemperatureSensorAccessory';
 import { HumiditySensorAccessory } from './HumiditySensorAccessory';
 import fetch from 'node-fetch';
@@ -124,9 +124,9 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
             } else if (device.type === 'Humidity Sensor') {
               this.deviceAccessories.push(new HumiditySensorAccessory(this, accessory));
             } else if(device.type==='Thermostat'){
-              this.deviceAccessories.push(new ThermostatAccessory(this,accessory));
+              this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
-              this.deviceAccessories.push(new FanAccessory(this,accessory));
+              this.deviceAccessories.push(new FanAccessory(this, accessory));
             }else {
               this.log.warn(`[Platform Warning]:  Device Type No Longer Supported (${device.name} | ${device.type})`);
             }
@@ -150,9 +150,9 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
             } else if (device.type === 'Humidity Sensor') {
               this.deviceAccessories.push(new HumiditySensorAccessory(this, accessory));
             } else if(device.type==='Thermostat'){
-              this.deviceAccessories.push(new ThermostatAccessory(this,accessory));
+              this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
-              this.deviceAccessories.push(new FanAccessory(this,accessory));
+              this.deviceAccessories.push(new FanAccessory(this, accessory));
             }
           
             // Add the new accessory to the accessories cache
