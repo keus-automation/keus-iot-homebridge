@@ -119,14 +119,6 @@
                   "type": "boolean",
                   "default": false
                 },
-                "On": {
-                  "title": "On",
-                  "type": "boolean",
-                  "default": true,
-                  "condition": {
-                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].Thermostat.enabled === true;"
-                  } 
-                },
                 "Mode": {
                   "title": "Mode",
                   "type": "boolean",
@@ -374,7 +366,6 @@
             "remoteApiCharPoll[].Fan.On",
             "remoteApiCharPoll[].Fan.RotationSpeed",
             "remoteApiCharPoll[].Thermostat.enabled",
-            "remoteApiCharPoll[].Thermostat.On",
             "remoteApiCharPoll[].Thermostat.Mode",
             "remoteApiCharPoll[].Thermostat.CurrentTemperature",
             "remoteApiCharPoll[].Thermostat.TargetTemperature"
