@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback} from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback, Logger} from 'homebridge';
 import { dynamicAPIPlatform } from './platform';
 
 /**
@@ -10,13 +10,14 @@ export class ThermostatAccessory {
   private charParams
 
   constructor(
+      
     private readonly platform: dynamicAPIPlatform,
     private readonly accessory: PlatformAccessory,
   ) {
 
     // Supported accessory characteristics
     this.charParams = {
-      On: {required: true, get: true, set: true},
+      On: {required: false, get: true, set: true},
       Mode: {required: false, get: true, set: true},
       CurrentTemperature: {required: false, get: true},
       TargetTemperature: {required: false, get: true, set: true}
