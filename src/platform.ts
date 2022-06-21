@@ -9,7 +9,7 @@ import {FanAccessory} from './Fan';
 import { TemperatureSensorAccessory } from './TemperatureSensorAccessory';
 import { HumiditySensorAccessory } from './HumiditySensorAccessory';
 import fetch from 'node-fetch';
-import express, { json } from 'express';
+import express from 'express';
 import https from 'https';
 import fs from 'fs';
 import jwt from 'express-jwt';
@@ -115,7 +115,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
           
             // Update accessory context
             accessory.context.device = device;
-            this.log.info('!!!!this is accessory DISCOVERY:'+JSON.stringify(accessory));
+
             // create the accessory handler for the restored accessory
             if(device.type === 'Garage Door Opener') {
               this.deviceAccessories.push(new GarageDoorAccessory(this, accessory));
@@ -141,7 +141,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
 
             // store a copy of the device object in the `accessory.context`
             accessory.context.device = device;
-            this.log.info('!!!!this is accessory DISCOVERY:'+JSON.stringify(accessory));
+
             // create the accessory handler for the restored accessory
             if(device.type === 'Garage Door Opener') {
               this.deviceAccessories.push(new GarageDoorAccessory(this, accessory));
