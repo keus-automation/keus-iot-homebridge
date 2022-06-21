@@ -51,6 +51,8 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       'Lightbulb',
       'Temperature Sensor',
       'Humidity Sensor',
+      'Fan',
+      'THermostat'
     ];
 
     this.apiJWT = {
