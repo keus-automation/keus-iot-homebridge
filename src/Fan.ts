@@ -26,6 +26,14 @@ export class FanAccessory {
       .setCharacteristic(this.platform.Characteristic.Model, 'Fan')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, accessory.context.device.uuid);
 
+      this.accessory.getService(this.platform.Service.AccessoryInformation)!
+      .getCharacteristic(this.platform.Characteristic.RotationSpeed)
+      ?.setProps({
+        minValue: 0,
+        maxValue: 5,
+        minStep: 1
+      });
+
 
     // get the LightBulb service if it exists, otherwise create a new Fan service
     this.service = this.accessory.getService(this.platform.Service.Fan) || this.accessory.addService(this.platform.Service.Fan);
