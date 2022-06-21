@@ -16,6 +16,7 @@ export class TemperatureSensorAccessory {
 
     // Supported accessory characteristics
     this.charParams = {
+      On:{required: false, get:true, set: false},
       CurrentTemperature: {required: true, get: true, set: false},
       StatusActive: {required: false, get: true, set: false},
     };
