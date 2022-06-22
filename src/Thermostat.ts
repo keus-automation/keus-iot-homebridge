@@ -41,14 +41,39 @@ export class ThermostatAccessory {
       if (accessory.context.device.characteristics[char] !== undefined) {
         // SET - bind to the `setChar` method below
         if (this.charParams[char].set === true) {
-          this.service.getCharacteristic(this.platform.Characteristic[char])
-            .on('set', this.setChar.bind(this, [char]));
+            if(char==='CurrentTemperature' || char==='TargetTemperature'){
+                this.service.getCharacteristic(this.platform.Characteristic[char])
+                .setProps({
+                    minValue: 16,
+                    maxValue: 30,
+                    minStep: 1
+                  })
+                .on('set', this.setChar.bind(this, [char]));
+            }
+            else{
+                this.service.getCharacteristic(this.platform.Characteristic[char])
+                .on('set', this.setChar.bind(this, [char]));
+            }
+
+          
           this.platform.log.info(`[${this.platform.config.remoteApiDisplayName}] [Device Info]: ${this.accessory.context.device.name} registered for (${char}) SET characteristic`);
         }
         // GET - bind to the `getChar` method below  
         if (this.charParams[char].get === true) {
-          this.service.getCharacteristic(this.platform.Characteristic[char])
-            .on('get', this.getChar.bind(this, [char]));
+            if(char==='CurrentTemperature' || char==='TargetTemperature'){
+                this.service.getCharacteristic(this.platform.Characteristic[char])
+                .setProps({
+                    minValue: 16,
+                    maxValue: 30,
+                    minStep: 1
+                  })
+                .on('get', this.getChar.bind(this, [char]));
+            }
+            else{
+                this.service.getCharacteristic(this.platform.Characteristic[char])
+                .on('get', this.getChar.bind(this, [char]));
+            }
+         
           this.platform.log.info(`[${this.platform.config.remoteApiDisplayName}] [Device Info]: ${this.accessory.context.device.name} registered for (${char}) GET characteristic`);
         }
         // Poll Device Characteristics Periodically and Update HomeKit
