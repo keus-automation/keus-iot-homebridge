@@ -35,7 +35,7 @@ export class GarageDoorAccessory {
 
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Keus')
-      .setCharacteristic(this.platform.Characteristic.Model, 'Garage Door')
+      .setCharacteristic(this.platform.Characteristic.Model, 'Door')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, accessory.context.device.uuid);
 
     this.service = this.accessory.getService(this.platform.Service.GarageDoorOpener) || this.accessory.addService(this.platform.Service.GarageDoorOpener);
