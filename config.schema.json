@@ -180,6 +180,42 @@
                 }
               }
             },
+            "WindowCovering":{
+              "title":"Window Covering Accessory",
+              "type":"object",
+              "properties":{
+                "enabled": {
+                  "title": "Enable Window Covering Accessory",
+                  "type": "boolean",
+                  "default": false
+                },
+                "CurrentDoorState": {
+                  "title": "CurrentDoorState",
+                  "type": "boolean",
+                  "default": true,
+                  "condition": {
+                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                  } 
+                },
+                "TargetDoorState": {
+                  "title": "TargetDoorState",
+                  "type": "boolean",
+                  "default": true,
+                  "condition": {
+                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                  } 
+                },
+                "StatusJammed":{
+                  "title": "CurrentDoorState",
+                  "type": "boolean",
+                  "default": true,
+                  "condition": {
+                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                  } 
+                }
+              }
+              
+            },
             "TemperatureSensor": {
               "title": "Temperature Sensor Accessory",
               "type": "object",
@@ -376,7 +412,10 @@
             "remoteApiCharPoll[].Thermostat.enabled",
             "remoteApiCharPoll[].Thermostat.TargetHeatingCoolingState",
             "remoteApiCharPoll[].Thermostat.CurrentTemperature",
-            "remoteApiCharPoll[].Thermostat.TargetTemperature"
+            "remoteApiCharPoll[].Thermostat.TargetTemperature",
+            "remoteApiCharPoll[].WindowCovering.CurrentDoorState",
+            "remoteApiCharPoll[].WindowCovering.TargetDoorState",
+            "remoteApiCharPoll[].WindowCovering.StatusJammed"
           ]
         },
         "remoteApiPollInt"

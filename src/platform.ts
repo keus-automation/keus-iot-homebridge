@@ -8,6 +8,7 @@ import {ThermostatAccessory} from './Thermostat';
 import {FanAccessory} from './Fan';
 import { TemperatureSensorAccessory } from './TemperatureSensorAccessory';
 import { HumiditySensorAccessory } from './HumiditySensorAccessory';
+import { WindowCoveringAccessory } from './WindowCovering';
 import fetch from 'node-fetch';
 import express from 'express';
 import https from 'https';
@@ -52,7 +53,8 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       'Temperature Sensor',
       'Humidity Sensor',
       'Fan',
-      'Thermostat'
+      'Thermostat',
+      'Window Covering'
     ];
 
     this.apiJWT = {
@@ -129,6 +131,8 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
               this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
               this.deviceAccessories.push(new FanAccessory(this, accessory));
+            }else if(device.type==='Window Covering'){
+              this.deviceAccessories.push(new WindowCoveringAccessory(this, accessory));
             }else {
               this.log.warn(`[Platform Warning]:  Device Type No Longer Supported (${device.name} | ${device.type})`);
             }
@@ -155,6 +159,8 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
               this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
               this.deviceAccessories.push(new FanAccessory(this, accessory));
+            } else if(device.type==='Window Covering'){
+              this.deviceAccessories.push(new WindowCoveringAccessory(this, accessory));
             }
           
             // Add the new accessory to the accessories cache
