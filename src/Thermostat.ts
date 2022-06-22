@@ -17,7 +17,7 @@ export class ThermostatAccessory {
     // Supported accessory characteristics
     this.charParams = {
       On: {required: false, get: true, set: true},
-      Mode: {required: false, get: true, set: true},
+      TargetHeatingCoolingState: {required: false, get: true, set: true},
       CurrentTemperature: {required: false, set: true, get: true},
       TargetTemperature: {required: false, get: true, set: true}
     };

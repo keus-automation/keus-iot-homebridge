@@ -127,8 +127,8 @@
                   "functionBody": "return model.remoteApiCharPoll[arrayIndices].Thermostat.enabled === true;"
                   } 
                 },
-                "Mode":{
-                    "title":"Mode",
+                "TargetHeatingCoolingState":{
+                    "title":"targetHeatingCoolingState",
                     "type": "boolean",
                     "default": true,
                     "condition": {
@@ -374,7 +374,7 @@
             "remoteApiCharPoll[].Fan.On",
             "remoteApiCharPoll[].Fan.RotationSpeed",
             "remoteApiCharPoll[].Thermostat.enabled",
-            "remoteApiCharPoll[].Thermostat.Mode",
+            "remoteApiCharPoll[].Thermostat.TargetHeatingCoolingState",
             "remoteApiCharPoll[].Thermostat.CurrentTemperature",
             "remoteApiCharPoll[].Thermostat.TargetTemperature"
           ]
