@@ -127,6 +127,14 @@
                   "functionBody": "return model.remoteApiCharPoll[arrayIndices].Thermostat.enabled === true;"
                   } 
                 },
+                "Mode":{
+                    "title":"Mode",
+                    "type": "boolean",
+                    "default": true,
+                    "condition": {
+                      "functionBody": "return model.remoteApiCharPoll[arrayIndices].Thermostat.enabled === true;"
+                    }
+                 },
                 "CurrentTemperature":{
                   "title": "CurrentTemperature",
                   "type": "boolean",
