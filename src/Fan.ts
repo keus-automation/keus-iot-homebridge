@@ -17,6 +17,7 @@ export class FanAccessory {
     // Supported accessory characteristics
     this.charParams = {
       On: {required: true, get: true, set: true},
+      TargetFanState:{required: true, get: true, set: true},
       RotationSpeed: {required: false, get: true, set: true}
     };
 
@@ -27,7 +28,7 @@ export class FanAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, accessory.context.device.uuid);
 
       this.accessory.getService(this.platform.Service.AccessoryInformation)!
-      .getCharacteristic(this.platform.Characteristic.RotationSpeed)
+      .getCharacteristic(this.platform.Characteristic.TargetFanState)
       ?.setProps({
         minValue: 0,
         maxValue: 5,

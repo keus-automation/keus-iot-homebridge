@@ -100,6 +100,14 @@
                   "functionBody": "return model.remoteApiCharPoll[arrayIndices].Fan.enabled === true;"
                 } 
                 },
+                "TargetFanState":{
+                  "title": "TargetFanState",
+                  "type": "boolean",
+                  "default": true,
+                  "condition": {
+                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].Fan.enabled === true;"
+                } 
+                },
                 "RotationSpeed": {
                   "title": "RotationSpeed",
                   "type": "boolean",
@@ -372,6 +380,7 @@
             "remoteApiCharPoll[].HumiditySensor.StatusActive",
             "remoteApiCharPoll[].Fan.enabled",
             "remoteApiCharPoll[].Fan.On",
+            "remoteApiCharPoll[].Fan.TargetFanState",
             "remoteApiCharPoll[].Fan.RotationSpeed",
             "remoteApiCharPoll[].Thermostat.enabled",
             "remoteApiCharPoll[].Thermostat.TargetHeatingCoolingState",
