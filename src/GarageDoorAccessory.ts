@@ -19,7 +19,7 @@ export class GarageDoorAccessory {
     this.charParams = {
       CurrentDoorState: {required: true, get: true, set: false},
       TargetDoorState: {required: true, get: true, set: true},
-      ObstructionDetected: {required: true, get: true, set: false},
+      ObstructionDetected: {required: false, get: true, set: false},
     };
 
     // set accessory information
