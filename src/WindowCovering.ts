@@ -104,7 +104,7 @@ export class WindowCoveringAccessory {
         if (!device['errno']) {
             this.platform.log.info(`[HomeKit] [Device Event]: (${this.accessory.context.device.name} | ${char}) set to (${charValue})`);
         }
-        callback(null);
+        callback(null, {PositionState: 2});
     }
 
 
