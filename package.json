@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Keus plugin",
   "name": "@keus-automation/keus-iot-homebridge",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "description": "This is a Homebridge dynamic platform plugin which exposes remote light and garage door accessories through a remote API",
   "license": "Apache-2.0",
   "repository": {
