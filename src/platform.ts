@@ -26,7 +26,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
 
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
-  
+
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
 
@@ -41,7 +41,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
     public readonly log: Logger,
     public readonly config: PlatformConfig,
     public readonly api: API,
-    
+
   ) {
     this.log.info(`[Platform Event]:  ${PLATFORM_NAME} platform Initialized`);
 
@@ -54,7 +54,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       'Humidity Sensor',
       'Fan',
       'Thermostat',
-      'Window'
+      'Window Covering'
     ];
 
     this.apiJWT = {
@@ -65,7 +65,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       'valid': false,
     };
 
-    /** 
+    /**
      * When this event is fired it means Homebridge has restored all cached accessories from disk.
      * Dynamic Platform plugins should only register new accessories after this event was fired,
      * in order to ensure they weren't added to homebridge already. This event can also be used
@@ -112,9 +112,9 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
 
           // the accessory already exists
           if (accessory) {
-          
+
             this.log.info(`[Platform Event]:  Restored Device (${device.name}) from ${this.config.remoteApiDisplayName}`);
-          
+
             // Update accessory context
             accessory.context.device = device;
 
@@ -131,7 +131,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
               this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
               this.deviceAccessories.push(new FanAccessory(this, accessory));
-            }else if(device.type==='Window'){
+            }else if(device.type==='Window Covering'){
               this.deviceAccessories.push(new WindowCoveringAccessory(this, accessory));
             }else {
               this.log.warn(`[Platform Warning]:  Device Type No Longer Supported (${device.name} | ${device.type})`);
@@ -159,10 +159,10 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
               this.deviceAccessories.push(new ThermostatAccessory(this, accessory));
             } else if(device.type==='Fan'){
               this.deviceAccessories.push(new FanAccessory(this, accessory));
-            } else if(device.type==='Window'){
+            } else if(device.type==='Window Covering'){
               this.deviceAccessories.push(new WindowCoveringAccessory(this, accessory));
             }
-          
+
             // Add the new accessory to the accessories cache
             this.accessories.push(accessory);
 
@@ -173,14 +173,14 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
           } else {
             this.log.warn(`[Platform Warning]:  Device Type Not Supported (${device.name} | ${device.type})`);
           }
-          
-        } 
-    
+
+        }
+
         // Delete an old accessory
         if (this.accessories.length > discoveredDevices.length) {
 
           for (let accessoryIndex = this.accessories.length - 1; accessoryIndex > 0; accessoryIndex --) {
-            if (discoveredDevices.findIndex(devices => devices.uuid === this.accessories[accessoryIndex].context.device.uuid) === -1) { 
+            if (discoveredDevices.findIndex(devices => devices.uuid === this.accessories[accessoryIndex].context.device.uuid) === -1) {
               const accessory = this.accessories[accessoryIndex];
               this.api.unregisterPlatformAccessories('PLUGIN_NAME', 'PLATFORM_NAME', [accessory]);
               this.log.info(`[Platform Event]:  Deleted Device (${this.accessories[accessoryIndex].context.device.name})`);
@@ -191,7 +191,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       } catch {
         this.log.error('[Platform Error]:  Invalid response from remote API');
       }
-    } 
+    }
   }
 
 
@@ -201,7 +201,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       this.log.warn(`[Platform Warning]: No devices synchronised from ${this.config.remoteApiDisplayName}`);
       res.status(404).send(`WARNING: No devices synchronised from ${this.config.remoteApiDisplayName}`);
     } else {
-     
+
       const accessoryIndex = this.accessories.findIndex(accessory => accessory.context.device.uuid === req.body.uuid);
 
       if (accessoryIndex === -1){
@@ -211,14 +211,14 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       } else {
 
         if (this.deviceAccessoryTypes.includes(this.accessories[accessoryIndex].context.device.type)) {
-          
+
           const chars = {};
           Object.assign(chars, req.body.characteristics);
           this.deviceAccessories[accessoryIndex].updateChar(chars);
           res.send(JSON.stringify(this.accessories[accessoryIndex].context.device));
-      
+
         } else {
-          
+
           this.log.info(`[Platform Warning]: Device with type: (${req.body.uuid} | ${req.body.type}) not found`);
           res.status(404).send(`WARNING: Device with type: (${req.body.uuid} | ${req.body.type}) not found`);
         }
@@ -228,9 +228,9 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
 
 
   async getAuthToken() {
-    
+
     const url = `${this.config.jwtIssuer}oauth/token`;
-    
+
     // send POST request
     await fetch(url, {
       method: 'POST',
@@ -248,7 +248,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       .then(res => res.json())
       .then(res => {
         if (res === undefined) {
-          this.apiJWT.valid = false; 
+          this.apiJWT.valid = false;
         } else {
           this.apiJWT = {
             'access_token': res.access_token,
@@ -257,12 +257,12 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
             'scope': res.scope,
             'valid': true,
           };
-        } 
+        }
       })
       .catch(error => this.log.error(`[Platform Error]:  ${this.config.remoteApiDisplayName} JWT Fetch Failure: ${error}`));
   }
 
-  
+
   async webServer() {
 
     const WebApp = express();
@@ -286,7 +286,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
     });
 
     const checkScopes = jwtAuthz([ 'write:api' ]);
-    
+
 
     // Initialise Direct Connect API
     if (this.config.directConnectApiHttps === true){
@@ -313,14 +313,14 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
         https.createServer(options, WebApp).listen(this.config.directConnectApiPort, directConnectApiIP, () => {
           this.log.info(`[Platform Info]:  Direct Connect API service started at https://${directConnectApiIP}:${this.config.directConnectApiPort}`);
         });
-      } 
+      }
     } else {
       WebApp.listen(this.config.directConnectApiPort, directConnectApiIP, () => {
         this.log.info(`[Platform Info]:  Direct Connect API service started at http://${directConnectApiIP}:${this.config.directConnectApiPort}`);
       });
     }
 
-    if (!error) {   
+    if (!error) {
       // Create Direct Connect API GET Route Response
       let apiGetResponse = '';
 
@@ -337,7 +337,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
         res.send(`[${this.config.remoteApiDisplayName}] [Platform Info]:  Homebridge Direct Connect API Running`);
         this.log.info('[Platform Info]:  GET Direct Connect API Status');
       });
-    
+
       WebApp.get( '/api/', ( req, res ) => {
         if (this.config.jwt === true){
           res.send(`[${this.config.remoteApiDisplayName}] [Platform Info]:  Homebridge Direct Connect API Running <br><br>${apiGetResponse}`);
@@ -374,7 +374,7 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
     if (this.validURL(this.config.remoteApiURL)) {
 
       if (this.config.jwt && (this.apiJWT.valid === false || this.apiJWT.expires <= Date.now() + 60000)) {
-        await this.getAuthToken(); 
+        await this.getAuthToken();
       }
       if (this.apiJWT.status === false && this.config.jwt === true) {
         this.log.error(`[Platform Error]:  No valid ${this.config.remoteApiDisplayName} JWT to discover devices`);
@@ -405,11 +405,11 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
             headers: headers,
           };
         }
-        
+
         if (method === 'POST' || method === 'PATCH') {
           options['body'] = body;
         }
-      
+
         // send Method request
         const response = await fetch(url, options)
           .then(res => {
@@ -431,11 +431,11 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
       }
     } else {
       this.log.error(`[Platform Error]:  Invalid Remote API URL - ${this.config.remoteApiURL}`);
-      const error = {'errno': `Invalid Remote API URL - ${this.config.remoteApiURL}`}; 
+      const error = {'errno': `Invalid Remote API URL - ${this.config.remoteApiURL}`};
       return error;
     }
   }
-  
+
   getIPAddress() {
     const interfaces = os.networkInterfaces();
     for (const deviceName in interfaces) {
@@ -460,5 +460,5 @@ export class dynamicAPIPlatform implements DynamicPlatformPlugin {
     return !!pattern.test(str);
   }
 }
-  
+
 
