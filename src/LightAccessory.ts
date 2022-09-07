@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback} from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback, HAPStatus} from 'homebridge';
 import { dynamicAPIPlatform } from './platform';
 
 /**
@@ -23,6 +23,7 @@ export class LightAccessory {
       Saturation: {required: false, get: true, set: true},
     };
 
+    this.platform.log.info("!!!lightbulb characteristics "+JSON.stringify(accessory.context.device));
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Keus')
@@ -37,8 +38,8 @@ export class LightAccessory {
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.name);
 
     // register handlers for the Characteristics
+    
     for (const char in this.charParams) {
-
       if (accessory.context.device.characteristics[char] !== undefined) {
         // SET - bind to the `setChar` method below
         if (this.charParams[char].set === true) {
@@ -47,7 +48,9 @@ export class LightAccessory {
           this.platform.log.info(`[${this.platform.config.remoteApiDisplayName}] [Device Info]: ${this.accessory.context.device.name} registered for (${char}) SET characteristic`);
         }
         // GET - bind to the `getChar` method below  
-        if (this.charParams[char].get === true) {
+        
+        //ignore getChar for scene siche it is stateless
+        if (this.charParams[char].get === true ) {
           this.service.getCharacteristic(this.platform.Characteristic[char])
             .on('get', this.getChar.bind(this, [char]));
           this.platform.log.info(`[${this.platform.config.remoteApiDisplayName}] [Device Info]: ${this.accessory.context.device.name} registered for (${char}) GET characteristic`);
@@ -80,8 +83,8 @@ export class LightAccessory {
    * These are sent when the user changes the state of an accessory locally on the device.
    */
   async updateChar (chars) {
-
     for (const char in chars) {
+      
       if (this.checkChar(char, chars[char])) {
         this.service.updateCharacteristic(this.platform.Characteristic[char], chars[char]);
         this.platform.log.info(`[${this.platform.config.remoteApiDisplayName}] [Device Event]: (${this.accessory.context.device.name} | ${char}) set to (${chars[char]})`);
@@ -95,13 +98,14 @@ export class LightAccessory {
   /**
    * Handle "SET" characteristics requests from HomeKit
    */
-  setChar (char, charValue: CharacteristicValue, callback: CharacteristicSetCallback) {
+  async setChar (char, charValue: CharacteristicValue, callback: CharacteristicSetCallback) {
     
-    const device = this.platform.remoteAPI('PATCH', this.accessory.context.device.uuid, `{"${char}": ${charValue}}`);
+    const device = await this.platform.remoteAPI('PATCH', this.accessory.context.device.uuid, `{"${char}": ${charValue}}`);
     if (!device['errno']) {
       this.platform.log.info(`[HomeKit] [Device Event]: (${this.accessory.context.device.name} | ${char}) set to (${charValue})`);
     }
-    callback(null);
+    //callback(null);
+    callback( device.success?HAPStatus.SUCCESS:HAPStatus.SERVICE_COMMUNICATION_FAILURE);
   }
 
   
@@ -109,22 +113,30 @@ export class LightAccessory {
    * Handle "GET" characteristics requests from HomeKit
    */
   async getChar(char, callback: CharacteristicGetCallback) {
-
-    const device = await this.platform.remoteAPI('GET', `${this.accessory.context.device.uuid}/characteristics/${char}`, '');
-    if (!device['errno'] && this.checkChar(char, device[char])) {
-      this.platform.log.info(`[HomeKit] [Device Info]: (${this.accessory.context.device.name} | ${char}) is (${device[char]})`);
-      callback(null, device[char]);
-    } else {
-      if (!device['errno']) {
-        this.platform.log.warn(`[HomeKit] [Device Warning]: (${this.accessory.context.device.name} | ${char}) invalid value (${device[char]})`);
-      }
-      // callback with error
-      // callback(new Error('Invalid Value'));
-
-      //callback with cached value
-      const charVal = this.service.getCharacteristic(this.platform.api.hap.Characteristic[char]).value;
-      callback(null, charVal);
+    const uuid:string=this.accessory.context.device.uuid;
+    let charVal;
+    
+    //if accesory is a scene then do not make API request to fetch the state since scene is stateless
+    if((uuid).substring(uuid.length-3, uuid.length)=="SCN"){
+      charVal=JSON.stringify({"On":false});
     }
+    else{
+      const device = await this.platform.remoteAPI('GET', `${this.accessory.context.device.uuid}/characteristics/${char}`, '');
+      if (!device['errno'] && this.checkChar(char, device[char])) {
+        this.platform.log.info(`[HomeKit] [Device Info]: (${this.accessory.context.device.name} | ${char}) is (${device[char]})`);
+        callback(null, device[char]);
+      } else {
+        if (!device['errno']) {
+          this.platform.log.warn(`[HomeKit] [Device Warning]: (${this.accessory.context.device.name} | ${char}) invalid value (${device[char]})`);
+        }
+        // callback with error
+        // callback(new Error('Invalid Value'));
+
+        //callback with cached value
+        charVal = this.service.getCharacteristic(this.platform.api.hap.Characteristic[char]).value;
+      }
+    }
+    callback(null, charVal);
   }
 
   /**
