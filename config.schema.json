@@ -110,6 +110,27 @@
                 }
               }
             },
+            "Switch":{
+              "title": "Switch Accessory",
+              "type": "object",
+              "properties":{
+                "enabled": {
+                  "title": "Enable Switch Accessory",
+                  "type": "boolean",
+                  "default": false
+                },
+                "On":{
+                  "title": "On",
+                  "type": "boolean",
+                  "default": true,
+                  "condition": {
+                  "functionBody": "return model.remoteApiCharPoll[arrayIndices].Switch.enabled === true;"
+                }
+               }
+            }
+
+            },
+            
             "Thermostat": {
               "title": "Thermostat Accessory",
               "type": "object",
@@ -205,16 +226,40 @@
                   "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
                   } 
                 },
+                "CurrentPosition":{
+                  "title":"CurrentPosition",
+                  "type":"boolean",
+                  "deafult": true,
+                  "condition": {
+                    "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                    } 
+                },
+                "TargetPosition":{
+                  "title":"TargetPosition",
+                  "type":"boolean",
+                  "deafult": true,
+                  "condition": {
+                    "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                    } 
+                },
+                "PositionState":{
+                  "title":"PositionState",
+                  "type":"boolean",
+                  "deafult": true,
+                  "condition": {
+                    "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
+                    } 
+                } 
+
+                },
                 "StatusJammed":{
-                  "title": "CurrentDoorState",
+                  "title": "StatusJammed",
                   "type": "boolean",
                   "default": true,
                   "condition": {
                   "functionBody": "return model.remoteApiCharPoll[arrayIndices].WindowCovering.enabled === true;"
                   } 
                 }
-              }
-              
             },
             "TemperatureSensor": {
               "title": "Temperature Sensor Accessory",
@@ -415,7 +460,16 @@
             "remoteApiCharPoll[].Thermostat.TargetTemperature",
             "remoteApiCharPoll[].WindowCovering.CurrentDoorState",
             "remoteApiCharPoll[].WindowCovering.TargetDoorState",
-            "remoteApiCharPoll[].WindowCovering.StatusJammed"
+            "remoteApiCharPoll[].WindowCovering.StatusJammed",
+            "remoteApiCharPoll[].WindowCovering.enabled",
+            "remoteApiCharPoll[].WindowCovering.CurrentDoorState",
+            "remoteApiCharPoll[].WindowCovering.TargetDoorState",
+            "remoteApiCharPoll[].WindowCovering.CurrentPosition",
+            "remoteApiCharPoll[].WindowCovering.TargetPosition",
+            "remoteApiCharPoll[].WindowCovering.PositionState",
+            "remoteApiCharPoll[].WindowCovering.StatusJammed",
+            "remoteApiCharPoll[].Switch.enabled",
+            "remoteApiCharPoll[].Switch.On"
           ]
         },
         "remoteApiPollInt"
