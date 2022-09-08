@@ -142,7 +142,7 @@ export class WindowCoveringAccessory {
 
       if (charType === 'bool' && typeof charValue === 'boolean') {
         return true;
-      } else if ((charType === 'float' || charType === 'int') && charValue >= charMin && charValue <= charMax){
+      } else if ((charType === 'float' || charType === 'int' || charType === 'uint8') && charValue >= charMin && charValue <= charMax){
         return true;
       } else {
         return false;
